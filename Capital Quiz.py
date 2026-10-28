@@ -209,26 +209,30 @@ def Capital():
 
     score = 0
     total = len(country_list)
-     
+
     print(f"Loaded {total} countries from dictionary! Let's test your knowledge.")
     print("Type 'quit' at any time to exit the game.\n")
-    print("-" * 40) 
+    print("-" * 40)
 
     for country, capital in country_list:
         guess = input(f"What is the capital of {country}? ").strip()
-        
-        # Check if the user wants to exit
-        if guess.lower() == "quit":
-            print(f"\nGame exited early. Your final score: {score}")
+
+        if guess.casefold() == "quit":
+            print(f"\nGame exited early. Your final score: {score}/{total}")
             return
-            
-        if guess.lower() == capital.lower():
+
+        # Accept comma-separated and slash-separated alternatives
+        accepted_capitals = [
+            answer.strip().casefold()
+            for answer in capital.replace("/", ",").split(",")
+        ]
+
+        if guess.casefold() in accepted_capitals:
             print("Correct!\n")
-            score=score+1
-            
+            score += 1
         else:
-            print(f"Incorrect. The capital of {country} is {capital}.\n")
+            print(f"Incorrect. Accepted answer(s): {capital.replace('/', ', ')}\n")
 
     print(f"Quiz Complete! Your final score: {score}/{total}")
-
+    
 Capital()
